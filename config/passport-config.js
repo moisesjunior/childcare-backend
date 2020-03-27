@@ -1,7 +1,11 @@
 const LocalStrategy = require('passport-local').Strategy,
     Usuario = require('../models/usuarios'),
     bcrypt = require('bcrypt'),
-    passport = require('passport')
+    passport = require('passport'),
+    passportJWT = require('passport-jwt'),
+    ExtractJWT = passportJWT.ExtractJwt,
+    JWTStrategy = passportJWT.Strategy
+
 
 // used to serialize the user for the session
 passport.serializeUser(function(user, done) {
@@ -34,5 +38,14 @@ passport.use(new LocalStrategy({
                         }
                         return done(null, user);
                     });
+    }
+));
+
+passport.use(new JWTStrategy({
+        jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+        secretOrKey   : 'childcare-token'
+    },
+    function (jwtPayload, done) {
+        return done(null, user);
     }
 ));

@@ -2,6 +2,7 @@ const conexao = require('../infra/connection')
 const bcrypt = require('bcrypt')
 const salt = bcrypt.genSaltSync(10)
 const passport = require('passport')
+const jwt = require('jsonwebtoken')
 
 class Usuario {
     adiciona(usuario, res){
@@ -52,11 +53,12 @@ class Usuario {
                     return next(erro);
                 }
 
-                req.login(usuario, (erro) => {
+                req.login(usuario, {session: false}, (erro) => {
                     if(erro){
                         return next(erro);
                     }
-                    return res.status(200).send(usuario);
+                    const token = jwt.sign(JSON.stringify(usuario), 'childcare-token');
+                    return res.send({usuario, token});
                 })
             })(req, res, next); // responsável por executar a estratégia de autenticação
         };
