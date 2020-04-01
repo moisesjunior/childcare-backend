@@ -3,10 +3,10 @@
 const mysql = require('mysql');
 
 const conexao = mysql.createConnection({
-    host: 'localhost',
+    host: 'childcare-rds.catixrmlf909.sa-east-1.rds.amazonaws.com',
     port: 3306,
-    user: 'root',
-    password: 'MJun10r04#',
+    user: 'masterUsername',
+    password: 'momonem1234',
     database: 'childcare'
 });
 

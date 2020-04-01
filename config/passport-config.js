@@ -1,5 +1,5 @@
 const LocalStrategy = require('passport-local').Strategy,
-    Usuario = require('../models/usuarios'),
+    Auth = require('../models/auth'),
     bcrypt = require('bcrypt'),
     passport = require('passport'),
     passportJWT = require('passport-jwt'),
@@ -15,7 +15,7 @@ passport.serializeUser(function(user, done) {
 
 // used to deserialize the user
 passport.deserializeUser(function(usr_email, done) {
-    User.buscaEmail(usr_email, function(err, user) {
+    Auth.buscaEmail(usr_email, function(err, user) {
         done(err, user);
     });
 });
@@ -24,7 +24,7 @@ passport.use(new LocalStrategy({
     usernameField: 'usr_email',
     passwordField: 'usr_password'
     }, function(usr_email, usr_password, done) {
-        Usuario.buscaEmail(usr_email)
+        Auth.buscaEmail(usr_email)
                     .then( user => {
                         if (!user) {
                             return done(null, false, {

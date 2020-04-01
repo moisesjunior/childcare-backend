@@ -11,7 +11,7 @@ class Tabelas {
             usr_email varchar(50) NOT NULL,
             usr_password varchar(255) NOT NULL,
             usr_name varchar(255) NOT NULL,
-            usr_status int NOT NULL,
+            usr_data_insercao DATETIME NOT NULL,
             PRIMARY KEY(usr_id))
         `
         this.conexao.query(sql, (erro) => {
