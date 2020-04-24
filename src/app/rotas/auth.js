@@ -1,8 +1,8 @@
 // Responsável por exportar todas as configurações de rotas
-const Auth = require('../models/auth')
+const AuthController = require('../controllers/AuthController')
 
 module.exports = app => {
     app.post('/login', 
-        Auth.login()
+        AuthController.login()
     );
 }

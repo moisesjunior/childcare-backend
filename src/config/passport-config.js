@@ -1,5 +1,5 @@
 const LocalStrategy = require('passport-local').Strategy,
-    Auth = require('../models/auth'),
+    Auth = require('../app/models/auth'),
     bcrypt = require('bcrypt'),
     passport = require('passport'),
     passportJWT = require('passport-jwt'),
@@ -23,21 +23,22 @@ passport.deserializeUser(function(usr_email, done) {
 passport.use(new LocalStrategy({
     usernameField: 'usr_email',
     passwordField: 'usr_password'
-    }, function(usr_email, usr_password, done) {
+    }, 
+    function(usr_email, usr_password, done) {
         Auth.buscaEmail(usr_email)
-                    .then( user => {
-                        if (!user) {
-                            return done(null, false, {
-                                mensagem: 'Login inválido! Verifique as suas credenciais.'
-                            });
-                        }
-                        if (!bcrypt.compareSync(usr_password, user.usr_password)) {
-                            return done(null, false, {
-                                mensagem: 'Senha incorreta! Verifique as suas credenciais.'
-                            });
-                        }
-                        return done(null, user);
+            .then( user => {
+                if (!user) {
+                    return done(null, false, {
+                        mensagem: 'Login inválido! Verifique as suas credenciais.'
                     });
+                }
+                if (!bcrypt.compareSync(usr_password, user.usr_password)) {
+                    return done(null, false, {
+                        mensagem: 'Senha incorreta! Verifique as suas credenciais.'
+                    });
+                }
+                return done(null, user);
+            });
     }
 ));
 

@@ -7,7 +7,7 @@ const Cors = require('cors')
 const passport = require('passport')
 const logger = require('morgan')
 
-require('../config/passport-config')
+require('./passport-config')
 
 module.exports = () => {
     const app = express()
@@ -17,9 +17,9 @@ module.exports = () => {
     app.use(bodyParser.json())
     app.use(passport.initialize())
     consign()
-        .include('controllers')
+        .include('/src/app/rotas')
         .into(app)
-        // Consign agrupa todas as rotas presentes nos arquivos .js dentro da pasta controllers
+        // Consign agrupa todas as rotas presentes nos arquivos .js dentro da pasta rotas
         // e coloca todas dentro do objeto 'app'
     
     return(app)
