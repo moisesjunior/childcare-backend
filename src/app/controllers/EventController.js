@@ -2,42 +2,59 @@ const Evento = require('../models/events')
 
 class EventController {
     listarEventos = () => {
-        return (req, res) => {
-            Evento.listar()
-                .then(success => res.status(200).send(success))
-                .catch(erro => res.status(403).send(erro))
+        return async (req, res) => {
+            try{
+                let success = await Evento.listar()
+                res.status(200).send(success)
+            } catch (error) {
+                res.status(403).send(error)
+            }
         }
     }
 
     adicionaEvento = () => {
-        return (req, res) => {
-            Evento.adiciona(req.body)
-                .then(success => res.status(200).send(success))
-                .catch(erro => res.status(403).send(erro))
+        return async (req, res) => {
+            try {
+                let verify = await Evento.verificaAgenda(req.body, null)
+                let success = await Evento.adiciona(req.body)
+                res.status(200).send(success)
+            } catch (error) {
+                res.status(403).send(error)
+            }
         }
     }
 
     visualizaEvento = () => {
-        return (req, res) => {
-            Evento.visualizar(req.params.id)
-                .then(success => res.status(200).send(success))
-                .catch(erro => res.status(403).send(erro))
+        return async (req, res) => {
+            try{
+                let success = await Evento.visualizar(req.params.id)
+                res.status(200).send(success)
+            } catch (error){
+                res.status(403).send(error)
+            }
         }
     }
 
     removeEvento = () => {
-        return (req, res) => {
-            Evento.excluir(req.params.id)
-                .then(success => res.status(200).send(success))
-                .catch(erro => res.status(403).send(erro))
+        return async (req, res) => {
+            try {
+                let success = await Evento.excluir(req.params.id)
+                res.status(200).send(success)
+            } catch(error){
+                res.status(403).send(error)
+            }
         }
     }  
 
     editaEvento = () => {
-        return (req, res) => {
-            Evento.editar(req.params.id, req.body)
-                .then(success => res.status(200).send(success))
-                .catch(erro => res.status(403).send(erro))
+        return async (req, res) => {
+            try{
+                let verify = await Evento.verificaAgenda(req.body, req.params.id)
+                let success = await Evento.editar(req.params.id, req.body)
+                res.status(200).send(success)
+            } catch(error) {
+                res.status(403).send(error)
+            }
         }
     }
 }

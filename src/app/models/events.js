@@ -2,7 +2,40 @@ const conexao = require('../../config/connection')
 const dataAtual = new Date()
 
 class Evento {
-    verificaAgenda = (evento) => {
+    verificaAgenda = (evento, id) => {
+        let age_id = ""
+        if(id){
+            age_id = " age_id != " + conexao.escape(id) + " and "    
+        }
+        
+        const agenda = [
+            evento.age_date,
+            evento.age_start,
+            evento.age_end
+        ]
+        return new Promise((resolve, reject) => {
+            const sql = `SELECT age_date, age_start, age_end 
+                        FROM agenda
+                        WHERE ` + age_id + ` age_date = ` + conexao.escape(agenda[0]) + ` and (
+                        (age_start <= ` + conexao.escape(agenda[1]) + ` and age_end >= ` + conexao.escape(agenda[1]) + `)
+                        or
+                        (age_start <= ` + conexao.escape(agenda[2]) + ` and age_end >= ` + conexao.escape(agenda[2]) + `)
+                        or
+                        (age_start <= ` + conexao.escape(agenda[2]) + ` and age_end >= ` + conexao.escape(agenda[1]) + `))`
+            conexao.query(
+                sql,
+                agenda,
+                (erro, resultados,fields) => {
+                    if(erro){
+                        return reject(erro)
+                    }
+                    if(resultados.length > 0){
+                        return reject("Já existe um evento nessa mesma data!")
+                    }
+                    return resolve(resultados)
+                }
+            )
+        })
     }
 
     listar = () => {
