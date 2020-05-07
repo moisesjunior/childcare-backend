@@ -1,24 +1,23 @@
 // Responsável por exportar todas as configurações de rotas
 const UserController = require('../controllers/UserController')
+const authMiddleware = require('../middlewares/auth')
 
 module.exports = app => {
-    app.get('/usuarios',
-        UserController.adicionaUsuario()
+    app.use(authMiddleware)
+
+    app.get('/usuario/:id',
+        UserController.buscarUsuario()
     );
 
-    app.get('/usuarios/:id',
-        UserController.adicionaUsuario()
+    app.post('/usuario', 
+        UserController.adicionarUsuario()
     );
 
-    app.post('/usuarios', 
-        UserController.adicionaUsuario()
+    app.put('/usuario/:id',
+        UserController.editarUsuario()
     );
 
-    app.put('/usuarios/:id',
-        UserController.adicionaUsuario()
-    );
-
-    app.delete('/usuarios/:id',
-        UserController.adicionaUsuario()
+    app.delete('/usuario/:id',
+        UserController.removerUsuario()
     );
 }

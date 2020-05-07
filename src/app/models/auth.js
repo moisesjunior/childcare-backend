@@ -3,7 +3,7 @@ const conexao = require('../../config/connection')
 class Auth {
     buscaEmail = email => {
         return new Promise(function (resolve, reject) {
-            const sql = "SELECT usr_email, usr_password FROM usuarios WHERE ?"
+            const sql = "SELECT usr_id, usr_ugr_id, usr_email, usr_password FROM usuarios WHERE ?"
             conexao.query(
                 sql,
                 {

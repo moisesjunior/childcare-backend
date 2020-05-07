@@ -16,6 +16,7 @@ module.exports = () => {
     app.use(bodyParser.urlencoded({extended: true}))
     app.use(bodyParser.json())
     app.use(passport.initialize())
+    app.use(passport.session())
     consign()
         .include('/src/app/rotas')
         .into(app)

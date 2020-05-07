@@ -4,17 +4,18 @@ const LocalStrategy = require('passport-local').Strategy,
     passport = require('passport'),
     passportJWT = require('passport-jwt'),
     ExtractJWT = passportJWT.ExtractJwt,
-    JWTStrategy = passportJWT.Strategy
+    JWTStrategy = passportJWT.Strategy,
+    headerStrategy = require('passport-http-header-strategy').Strategy
 
 
 // used to serialize the user for the session
 passport.serializeUser(function(user, done) {
-    done(null, user.usr_email); 
+    done(null, user); 
    // where is this user.id going? Are we supposed to access this anywhere?
 });
 
 // used to deserialize the user
-passport.deserializeUser(function(usr_email, done) {
+passport.deserializeUser(function(user, done) {
     Auth.buscaEmail(usr_email, function(err, user) {
         done(err, user);
     });

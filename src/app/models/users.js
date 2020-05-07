@@ -25,13 +25,10 @@ class Usuario {
             )
         })
     }
+    lista = (tipo) => {
 
-    teste = (usuario) => {
-        console.log(usuario)
-        return new Promise((resolve, reject) => {
-            return resolve(usuario)
-        })
     }
+    
 }
 
 module.exports = new Usuario

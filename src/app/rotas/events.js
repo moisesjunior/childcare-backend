@@ -1,6 +1,9 @@
 const EventController = require('../controllers/EventController')
+const authMiddleware = require('../middlewares/auth')
 
 module.exports = app => {
+    app.use(authMiddleware)
+
     app.get("/event/:id",
         EventController.visualizaEvento()
     )
