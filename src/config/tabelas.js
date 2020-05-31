@@ -5,6 +5,7 @@ class Tabelas {
         this.criarUsuarios()
         this.criarAgenda()
         this.criarGrupoUsuarios()
+        this.criarPacientes()
     }
 
     criarUsuarios(){
@@ -34,7 +35,8 @@ class Tabelas {
         const sql = `CREATE TABLE IF NOT EXISTS agenda (
                     age_id INT NOT NULL AUTO_INCREMENT,
                     age_status INT NOT NULL COMMENT 'Status do agendamento',
-                    age_type INT NOT NULL COMMENT 'Tipo do agendamento',
+                    age_type_con INT NOT NULL COMMENT 'Tipo da consulta',
+                    age_type_ate INT NOT NULL COMMENT 'Tipo do atendimento',
                     age_date DATE NOT NULL COMMENT 'Data do agendamento',
                     age_start TIME NOT NULL COMMENT 'Horário de início do agendamento',
                     age_end TIME NOT NULL COMMENT 'Horário de término do agendamento',
@@ -47,7 +49,7 @@ class Tabelas {
                     INDEX fk_age_patient_idx (age_patient ASC) VISIBLE,
                     CONSTRAINT fk_age_patient
                         FOREIGN KEY (age_patient)
-                        REFERENCES childcare.usuarios(usr_id)
+                        REFERENCES childcare.paciente(pat_id)
                         ON DELETE NO ACTION
                         ON UPDATE NO ACTION,
 					INDEX fk_age_doctor_idx (age_patient ASC) VISIBLE,
@@ -76,6 +78,60 @@ class Tabelas {
                     COMMENT = 'Tabela de grupo de usuários';`
         this.conexao.query(sql, (erro) => {
             if(erro){
+                console.log('Tabela não foi criada')
+            } else {
+                console.log('Tabela criada com sucesso')
+            }
+        })
+    }
+
+    criarPacientes(){
+        const sql = `CREATE TABLE IF NOT EXISTS childcare.paciente (
+                    pat_id INT NOT NULL AUTO_INCREMENT,
+                    pat_name VARCHAR(255) NOT NULL,
+                    pat_birth DATE NULL,
+                    pat_gender VARCHAR(5) NULL,
+                    pat_rg VARCHAR(45) NULL,
+                    pat_cpf VARCHAR(45) NULL,
+                    pat_birth_certificate VARCHAR(45) NULL,
+                    pat_cep VARCHAR(45) NULL,
+                    pat_street VARCHAR(100) NULL,
+                    pat_neighborhood VARCHAR(100) NULL,
+                    pat_number INT NULL,
+                    pat_complement VARCHAR(100) NULL,
+                    pat_city VARCHAR(100) NULL,
+                    pat_state VARCHAR(5) NULL,
+                    pat_country VARCHAR(5) NULL,
+                    pat_resp_name1 VARCHAR(255) NULL,
+                    pat_resp_gender1 VARCHAR(5) NULL,
+                    pat_resp_birth1 DATE NULL,
+                    pat_resp_rg1 VARCHAR(55) NULL,
+                    pat_resp_cpf1 VARCHAR(55) NULL,
+                    pat_resp_tel1 VARCHAR(20) NULL,
+                    pat_resp_email1 VARCHAR(55) NULL,
+                    pat_resp_name2 VARCHAR(255) NULL,
+                    pat_resp_gender2 VARCHAR(5) NULL,
+                    pat_resp_birth2 DATE NULL,
+                    pat_resp_rg2 VARCHAR(55) NULL,
+                    pat_resp_cpf2 VARCHAR(55) NULL,
+                    pat_resp_tel2 VARCHAR(20) NULL,
+                    pat_resp_email2 VARCHAR(55) NULL,
+                    pat_blood_type varchar(5) NULL,
+                    pat_height float(17,2) NULL,
+                    pat_weight int NULL,
+                    pat_imc float(17,2) NULL,
+                    pat_skin_color int NULL,
+                    pat_doc_usr_id int NULL,
+                    pat_medicines LONGTEXT NULL,
+                    pat_diseases LONGTEXT NULL,
+                    pat_dh_insert datetime NOT NULL,
+                    pat_dh_change datetime NOT NULL,
+                    PRIMARY KEY (pat_id),
+                    CONSTRAINT FK_pat_doc_usr_id FOREIGN KEY (pat_doc_usr_id)
+                    REFERENCES usuarios(usr_id))
+                    COMMENT = 'Tabela para registro de pacientes ';`
+        this.conexao.query(sql, (erro) => {
+            if (erro) {
                 console.log('Tabela não foi criada')
             } else {
                 console.log('Tabela criada com sucesso')

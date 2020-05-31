@@ -4,7 +4,7 @@ const dataAtual = new Date()
 class Evento {
     verificaAgenda = (evento, id) => {
         let age_id = ""
-        if(id, evento.age_doctor){
+        if(id){
             age_id = "age_id != " + conexao.escape(id) + " and"    
         }
         
@@ -19,11 +19,12 @@ class Evento {
                         FROM agenda
                         WHERE 
                         ` + age_id + ` age_date = ` + conexao.escape(agenda[0]) + ` and (
-                        (age_start <= ` + conexao.escape(agenda[1]) + ` and age_end >= ` + conexao.escape(agenda[1]) + `)
+                        (age_start < ` + conexao.escape(agenda[1]) + ` and age_end > ` + conexao.escape(agenda[1]) + `)
                         or
-                        (age_start <= ` + conexao.escape(agenda[2]) + ` and age_end >= ` + conexao.escape(agenda[2]) + `)
+                        (age_start < ` + conexao.escape(agenda[2]) + ` and age_end > ` + conexao.escape(agenda[2]) + `)
                         or
-                        (age_start <= ` + conexao.escape(agenda[2]) + ` and age_end >= ` + conexao.escape(agenda[1]) + `))`
+                        (age_start < ` + conexao.escape(agenda[2]) + ` and age_end > ` + conexao.escape(agenda[1]) + `))
+                        and age_doctor = ` + conexao.escape(agenda[3])
             conexao.query(
                 sql,
                 agenda,
@@ -32,7 +33,7 @@ class Evento {
                         return reject(erro)
                     }
                     if(resultados.length > 0){
-                        return reject("Já existe um evento nessa mesma data!")
+                        return reject("Já existe um evento nessa mesma data e horário com o médico!")
                     }
                     return resolve(resultados)
                 }
@@ -42,7 +43,7 @@ class Evento {
 
     listar = () => {
         return new Promise((resolve, reject) => {
-            const sql = "SELECT * FROM agenda"
+            const sql = "SELECT * FROM agenda LEFT JOIN usuarios ON age_patient = usr_id"
             conexao.query(
                 sql,
                 (erro, resultados, fields) => {
@@ -56,14 +57,30 @@ class Evento {
                         let age_end = evento.age_end.toLocaleString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit" })
                         let age_date_start = age_date + "T" + age_start
                         let age_date_end = age_date + "T" + age_end
-                        return {
+
+                        let age_tipo = ""
+                        switch (evento.age_type_con) {
+                            case 1:
+                                age_tipo = "Consulta"
+                                break;
+                            case 2:
+                                age_tipo = "Retorno"
+                                break;
+                            case 3:
+                                age_tipo = "Acompanhamento"
+                                break;
+                            default:
+                                break;
+                        }
+                        
+                        return [{
                             id: evento.age_id,
-                            title: evento.age_description,
+                            title: age_tipo + '\n' + evento.usr_name,
                             start: age_date_start,
                             end: age_date_end
-                        }
+                        }]
                     })
-
+                    
                     return resolve(eventos)
                 }
             )
@@ -73,7 +90,8 @@ class Evento {
     adiciona = evento => {
         const agendamento = {
             age_status: evento.age_status,
-            age_type: evento.age_type,
+            age_type_con: evento.age_type_con,
+            age_type_ate: evento.age_type_ate,
             age_date: evento.age_date,
             age_start: evento.age_start,
             age_end: evento.age_end,
@@ -101,7 +119,8 @@ class Evento {
     editar = (id, evento) => {
         const agendamento = {
             age_status: evento.age_status,
-            age_type: evento.age_type,
+            age_type_con: evento.age_type_con,
+            age_type_ate: evento.age_type_ate,
             age_date: evento.age_date,
             age_start: evento.age_start,
             age_end: evento.age_end,
@@ -146,7 +165,8 @@ class Evento {
                         return{
                             age_id: evento.age_id,
                             age_status: evento.age_status,
-                            age_type: evento.age_type,
+                            age_type_con: evento.age_type_con,
+                            age_type_ate: evento.age_type_ate,
                             age_date: age_date,
                             age_start: evento.age_start,
                             age_end: evento.age_end,
