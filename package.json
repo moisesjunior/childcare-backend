@@ -4,9 +4,8 @@
   "description": "Servidor do sistema ChildCare",
   "main": "index.js",
   "scripts": {
-    "start:dev": "nodemon index.js",
     "start": "node index.js",
-    "test": "npm start"
+    "test": "nodemon index.js"
   },
   "keywords": [
     "ChildCare",
