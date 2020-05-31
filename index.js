@@ -1,7 +1,7 @@
 // Única função do arquivo index.js é subir o servidor
-const customExpress = require('./config/custom-express')
-const conexao = require('./infra/connection')
-const Tabelas = require('./infra/tabelas')
+const customExpress = require('./src/config/custom-express')
+const conexao = require('./src/config/connection')
+const Tabelas = require('./src/config/tabelas')
 
 conexao.connect(erro => {
     if(erro){
