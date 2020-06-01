@@ -73,12 +73,12 @@ class Evento {
                                 break;
                         }
                         
-                        return [{
+                        return {
                             id: evento.age_id,
                             title: age_tipo + '\n' + evento.usr_name,
                             start: age_date_start,
                             end: age_date_end
-                        }]
+                        }
                     })
                     
                     return resolve(eventos)
