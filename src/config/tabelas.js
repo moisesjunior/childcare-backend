@@ -2,10 +2,10 @@ class Tabelas {
     init(conexao){
         this.conexao = conexao
 
-        this.criarUsuarios()
-        this.criarAgenda()
         this.criarGrupoUsuarios()
+        this.criarUsuarios()
         this.criarPacientes()
+        this.criarAgenda()
     }
 
     criarUsuarios(){
@@ -16,7 +16,7 @@ class Tabelas {
             usr_name varchar(255) NOT NULL,
             usr_data_insercao DATETIME NOT NULL,
             PRIMARY KEY(usr_id),
-            INDEX fk_usr_ugr_id_idx (usr_ugr_id ASC) VISIBLE,
+            INDEX fk_usr_ugr_id_idx (usr_ugr_id ASC),
             CONSTRAINT fk_usr_ugr_id
             FOREIGN KEY (usr_ugr_id)
             REFERENCES childcare.grupo_usuarios (ugr_id)
@@ -46,13 +46,13 @@ class Tabelas {
                     age_dh_insert DATETIME NOT NULL COMMENT 'Data de inserção do registro',
                     age_dh_changed DATETIME NULL COMMENT 'Data de alteração do registro',
                     PRIMARY KEY (age_id),
-                    INDEX fk_age_patient_idx (age_patient ASC) VISIBLE,
+                    INDEX fk_age_patient_idx (age_patient ASC),
                     CONSTRAINT fk_age_patient
                         FOREIGN KEY (age_patient)
                         REFERENCES childcare.paciente(pat_id)
                         ON DELETE NO ACTION
                         ON UPDATE NO ACTION,
-					INDEX fk_age_doctor_idx (age_patient ASC) VISIBLE,
+					INDEX fk_age_doctor_idx (age_patient ASC),
                     CONSTRAINT fk_age_doctor
                         FOREIGN KEY (age_doctor)
                         REFERENCES childcare.usuarios(usr_id)

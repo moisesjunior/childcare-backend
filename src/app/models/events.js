@@ -80,7 +80,6 @@ class Evento {
                             end: age_date_end
                         }
                     })
-                    
                     return resolve(eventos)
                 }
             )
