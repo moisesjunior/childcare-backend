@@ -124,7 +124,54 @@ class Paciente {
                         return reject(erro)
                     }
 
-                    return resolve(resultados)
+                    let paciente = resultados.map((dado) => {
+                        let pat_birth = dado.pat_birth.toLocaleDateString("pt-BR", { year: "numeric", month: "2-digit", day: "2-digit" })
+                        let pat_resp_birth1 = dado.pat_resp_birth1.toLocaleDateString("pt-BR", { year: "numeric", month: "2-digit", day: "2-digit" })
+                        let pat_resp_birth2 = ""
+                        if(dado.pat_resp_birth2 != null){
+                            pat_resp_birth2 = (dado.pat_resp_birth2.toLocaleDateString("pt-BR", { year: "numeric", month: "2-digit", day: "2-digit" }) || '')
+                        }
+                        return {
+                            pat_id: dado.pat_id,
+                            pat_name: dado.pat_name,
+                            pat_birth: pat_birth,
+                            pat_gender: dado.pat_gender,
+                            pat_rg: dado.pat_rg,
+                            pat_cpf: dado.pat_cpf,
+                            pat_birth_certificate: dado.pat_birth_certificate,
+                            pat_cep: dado.pat_cep,
+                            pat_street: dado.pat_street,
+                            pat_neighborhood: dado.pat_neighborhood,
+                            pat_number: dado.pat_number,
+                            pat_complement: dado.pat_complement,
+                            pat_city: dado.pat_city,
+                            pat_state: dado.pat_state,
+                            pat_resp_name1: dado.pat_resp_name1,
+                            pat_resp_gender1: dado.pat_resp_gender1,
+                            pat_resp_birth1: pat_resp_birth1,
+                            pat_resp_rg1: dado.pat_resp_rg1,
+                            pat_resp_cpf1: dado.pat_resp_cpf1,
+                            pat_resp_tel1: dado.pat_resp_tel1,
+                            pat_resp_email1: dado.pat_resp_email1,
+                            pat_resp_name2: dado.pat_resp_name2,
+                            pat_resp_gender2: dado.pat_resp_gender2,
+                            pat_resp_birth2: pat_resp_birth2,
+                            pat_resp_rg2: dado.pat_resp_rg2,
+                            pat_resp_cpf2: dado.pat_resp_cpf2,
+                            pat_resp_tel2: dado.pat_resp_tel2,
+                            pat_resp_email2: dado.pat_resp_email2,
+                            pat_blood_type: dado.pat_blood_type,
+                            pat_height: dado.pat_height,
+                            pat_weight: dado.pat_weight,
+                            pat_imc: dado.pat_imc,
+                            pat_skin_color: dado.pat_skin_color,
+                            pat_doc_usr_id: dado.pat_doc_usr_id,
+                            pat_medicines: dado.pat_medicines,
+                            pat_diseases: dado.pat_diseases,
+                        }
+                    })
+
+                    return resolve(paciente)
                 }
             )
         })
@@ -146,7 +193,6 @@ class Paciente {
                 pat_complement: paciente.pat_complement,
                 pat_city: paciente.pat_city,
                 pat_state: paciente.pat_state,
-                pat_country: paciente.pat_country,
                 pat_resp_name1: paciente.pat_resp_name1,
                 pat_resp_gender1: paciente.pat_resp_gender1,
                 pat_resp_birth1: paciente.pat_resp_birth1,
@@ -156,7 +202,7 @@ class Paciente {
                 pat_resp_email1: paciente.pat_resp_email1,
                 pat_resp_name2: paciente.pat_resp_name2,
                 pat_resp_gender2: paciente.pat_resp_gender2,
-                pat_resp_birth2: paciente.pat_resp_birth2,
+                pat_resp_birth2: (paciente.pat_resp_birth2 === "" ? null : paciente.pat_resp_birth2),
                 pat_resp_rg2: paciente.pat_resp_rg2,
                 pat_resp_cpf2: paciente.pat_resp_cpf2,
                 pat_resp_tel2: paciente.pat_resp_tel2,
@@ -177,7 +223,7 @@ class Paciente {
                 pacientes,
                 (erro, resultados, fields) => {
                     if(erro){
-                        return reject("Ocorreu um erro ao adicionar o paciente")
+                        return reject(erro)
                     }
 
                     return resolve("Paciente adicionado com sucesso")
@@ -202,7 +248,6 @@ class Paciente {
                 pat_complement: paciente.pat_complement,
                 pat_city: paciente.pat_city,
                 pat_state: paciente.pat_state,
-                pat_country: paciente.pat_country,
                 pat_resp_name1: paciente.pat_resp_name1,
                 pat_resp_gender1: paciente.pat_resp_gender1,
                 pat_resp_birth1: paciente.pat_resp_birth1,
@@ -212,7 +257,7 @@ class Paciente {
                 pat_resp_email1: paciente.pat_resp_email1,
                 pat_resp_name2: paciente.pat_resp_name2,
                 pat_resp_gender2: paciente.pat_resp_gender2,
-                pat_resp_birth2: paciente.pat_resp_birth2,
+                pat_resp_birth2: (paciente.pat_resp_birth2 === "" ? null : paciente.pat_resp_birth2),
                 pat_resp_rg2: paciente.pat_resp_rg2,
                 pat_resp_cpf2: paciente.pat_resp_cpf2,
                 pat_resp_tel2: paciente.pat_resp_tel2,
@@ -233,7 +278,7 @@ class Paciente {
                 [pacientes, {pat_id: id}],
                 (erro, resultados, fields) => {
                     if (erro) {
-                        return reject("Ocorreu um erro ao alterar o paciente")
+                        return reject(erro)
                     }
 
                     return resolve("Paciente alterado com sucesso")

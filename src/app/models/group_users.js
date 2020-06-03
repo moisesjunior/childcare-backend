@@ -16,7 +16,21 @@ class GrupoUsuario {
                     if(resultados.length == 0){
                         return reject("Não foi encontrado nenhum usuário!")
                     }
-                    return resolve(resultados)
+
+                    let medicos = {
+                        value: "",
+                        label: "",
+                    }
+
+                    medicos = resultados.map((users, index) => {
+                        
+                        let array = {
+                            value: users.usr_id,
+                            label: users.usr_name
+                        }
+                        return array
+                    })
+                    return resolve(medicos)
                 }
             )
         })
