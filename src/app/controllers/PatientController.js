@@ -39,8 +39,8 @@ class PatientController {
         return async(req, res) => {
             try {
                 await Paciente.verifica(req.body)
-                let response = await Paciente.adicionar(req.body)
-                response = await Prontuario.adicionar(req.body.pat_id) 
+                let id = await Paciente.adicionar(req.body)
+                let response = await Prontuario.adicionar(id) 
                 res.status(200).send(response)
             } catch (error) {
                 res.status(403).send(error)
