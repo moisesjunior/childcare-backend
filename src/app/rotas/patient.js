@@ -8,6 +8,10 @@ module.exports = app => {
         PatientController.listarPaciente()
     )
 
+    app.get("/patient/list",
+        PatientController.listarPacienteToSelect()
+    )
+
     app.get("/patient/:id",
         PatientController.visualizaPaciente()
     )

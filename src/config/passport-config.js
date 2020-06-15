@@ -38,6 +38,7 @@ passport.use(new LocalStrategy({
                         mensagem: 'Senha incorreta! Verifique as suas credenciais.'
                     });
                 }
+                
                 return done(null, user);
             });
     }

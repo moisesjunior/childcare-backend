@@ -1,9 +1,21 @@
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
 const authConfig = require('../../config/auth.json')
+const Usuario = require('../models/users')
 
 class AuthController {
-    
+    signup() {
+        return async (req, res) => {
+            try {
+                let success = await Usuario.adiciona(req.body)
+                res.status(200).send(success)
+            } catch (error) {
+                res.status(403).send(error)
+            }
+        };
+    }
+
+
     login() {
         return function(req, res, next) {
             passport.authenticate('local', (erro, usuario, info) => {

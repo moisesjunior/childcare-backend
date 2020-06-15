@@ -4,12 +4,6 @@ const anoAtual = dataAtual.getFullYear()
 const mesAtual = dataAtual.getMonth()
 const diaAtual = dataAtual.getDate()
 
-// função para crianças menores de 1 ano
-// if (12 * (anoAtual - ano) > 12) {
-    
-// }
-
-
 class Paciente {
     verifica = (paciente, id) => {
         const info = {
@@ -23,8 +17,8 @@ class Paciente {
         }
 
         return new Promise((resolve, reject) => {
-            const sql = ` SELECT * FROM paciente WHERE ` + pat_id + ` pat_name = ` + conexao.escape(info[1]) +
-                ` and pat_birth_certificate = ` + conexao.escape(info[1])
+            const sql = ` SELECT * FROM paciente WHERE ${pat_id} pat_name = ${conexao.escape(info[0])} 
+                        and pat_birth_certificate = ${conexao.escape(info[1])} `
             conexao.query(
                 sql,
                 paciente,
@@ -115,7 +109,7 @@ class Paciente {
 
     visualizar = id => {
         return new Promise((resolve, reject) => {
-            const sql = `SELECT * FROM paciente WHERE ?`
+            const sql = `SELECT * FROM paciente LEFT JOIN usuarios ON usr_id = pat_doc_usr_id WHERE ?`
             conexao.query(
                 sql,
                 { pat_id: id },
@@ -125,6 +119,25 @@ class Paciente {
                     }
 
                     let paciente = resultados.map((dado) => {
+                        let ano = dado.pat_birth.getFullYear()
+                        let dia = dado.pat_birth.getDate()
+                        let mes = dado.pat_birth.getMonth()
+                        let age = anoAtual - ano
+                        let sexo = dado.pat_gender
+
+                        if (dia >= diaAtual && mes >= mesAtual) {
+                            age -= 1
+                            age = age + " anos"
+                        } else {
+                            age = age + " anos"
+                        }
+
+                        if (sexo == 'M') {
+                            sexo = "Masculino"
+                        } else {
+                            sexo = "Feminino"
+                        }
+
                         let pat_birth = dado.pat_birth.toLocaleDateString("pt-BR", { year: "numeric", month: "2-digit", day: "2-digit" })
                         let pat_resp_birth1 = dado.pat_resp_birth1.toLocaleDateString("pt-BR", { year: "numeric", month: "2-digit", day: "2-digit" })
                         let pat_resp_birth2 = ""
@@ -135,6 +148,8 @@ class Paciente {
                             pat_id: dado.pat_id,
                             pat_name: dado.pat_name,
                             pat_birth: pat_birth,
+                            pat_age: age,
+                            pat_sexo: sexo,
                             pat_gender: dado.pat_gender,
                             pat_rg: dado.pat_rg,
                             pat_cpf: dado.pat_cpf,
@@ -166,6 +181,7 @@ class Paciente {
                             pat_imc: dado.pat_imc,
                             pat_skin_color: dado.pat_skin_color,
                             pat_doc_usr_id: dado.pat_doc_usr_id,
+                            pat_doc_name: dado.usr_name,
                             pat_medicines: dado.pat_medicines,
                             pat_diseases: dado.pat_diseases,
                         }
@@ -226,7 +242,7 @@ class Paciente {
                         return reject(erro)
                     }
 
-                    return resolve("Paciente adicionado com sucesso")
+                    return resolve(resultados.insertId)
                 }
             )
         })
@@ -273,9 +289,10 @@ class Paciente {
                 pat_dh_change: dataAtual
             }
             const sql = `UPDATE paciente SET ? WHERE ?`
+            console.log(pacientes.pat_doc_usr_id)
             conexao.query(
                 sql,
-                [pacientes, {pat_id: id}],
+                [pacientes, {pat_id: paciente.pat_id}],
                 (erro, resultados, fields) => {
                     if (erro) {
                         return reject(erro)
@@ -299,6 +316,39 @@ class Paciente {
                     }
 
                     return resolve("Paciente excluído com sucesso")
+                }
+            )
+        })
+    }
+
+    listarSelect = () => {
+        return new Promise((resolve, reject) => {
+            const sql = "SELECT * FROM paciente"
+            conexao.query(
+                sql,
+                (erro, resultados, fields) => {
+                    if (erro) {
+                        return reject("Ocorreu um erro ao tentar encontrar os usuários!")
+                    }
+                    if (resultados.length == 0) {
+                        return reject("Não foi encontrado nenhum usuário!")
+                    }
+
+                    let pacientes = {
+                        value: "",
+                        label: "",
+                    }
+
+                    pacientes = resultados.map((pacientes, index) => {
+
+                        let array = {
+                            value: pacientes.pat_id,
+                            label: pacientes.pat_name
+                        }
+                        return array
+                    })
+                    
+                    return resolve(pacientes)
                 }
             )
         })

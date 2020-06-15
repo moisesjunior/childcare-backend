@@ -6,7 +6,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const passport = require('passport')
 const logger = require('morgan')
-
+const path = require('path')
 require('./passport-config')
 
 module.exports = () => {
@@ -16,7 +16,9 @@ module.exports = () => {
         origin = process.env.APP_URL,
     ))
     app.use(express.json())
+    app.use(express.urlencoded({ extended: true }))
     app.use(passport.initialize())
+    app.use('/files', express.static(path.resolve(__dirname, '..', 'tmp', 'uploads')))
     app.use(passport.session())
     consign()
         .include('/src/app/rotas')

@@ -2,10 +2,18 @@ const EventController = require('../controllers/EventController')
 const authMiddleware = require('../middlewares/auth')
 
 module.exports = app => {
-    app.use(authMiddleware)
+    // app.use(authMiddleware)
 
     app.get("/event/:id",
         EventController.visualizaEvento()
+    )
+
+    app.get("/graph",
+        EventController.carregaGraficos()
+    )
+
+    app.get("/event/patient/:id",
+        EventController.visualizaEventoPaciente()
     )
 
     app.get("/event",
@@ -23,4 +31,5 @@ module.exports = app => {
     app.delete("/event/:id",
         EventController.removeEvento()    
     )
+
 }

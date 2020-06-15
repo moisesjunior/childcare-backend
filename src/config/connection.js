@@ -7,7 +7,8 @@ const conexao = mysql.createConnection({
     port: process.env.HOST_PORT,
     user: process.env.HOST_USER,
     password: process.env.HOST_PASSWORD,
-    database: process.env.HOST_SCHEMA
+    database: process.env.HOST_SCHEMA,
+    multipleStatements: true
 });
 
 module.exports = conexao
