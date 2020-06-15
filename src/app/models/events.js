@@ -56,8 +56,8 @@ class Evento {
 
                     let eventos = resultados.map((evento) => {
                         let date = evento.age_date
-                        var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-                        let age_date = date.toLocaleDateString('pt-BR', options)
+                        let options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+                        let age_date = date.toLocaleString('pt-BR', options)
                         let age_start = evento.age_start.toLocaleString("pt-BR", {hour:"2-digit", minute: "2-digit", second: "2-digit"})
                         let age_end = evento.age_end.toLocaleString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit" })
                         let age_date_start = age_date + "T" + age_start
