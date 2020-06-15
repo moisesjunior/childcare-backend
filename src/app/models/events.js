@@ -4,6 +4,15 @@ const anoAtual = dataAtual.getFullYear()
 const mesAtual = dataAtual.getMonth() + 1
 const diaAtual = dataAtual.getDate()
 
+function dataAtualFormatada(date) {
+        dia = date.getDate().toString(),
+        diaF = (dia.length == 1) ? '0' + dia : dia,
+        mes = (date.getMonth() + 1).toString(), //+1 pois no getMonth Janeiro começa com zero.
+        mesF = (mes.length == 1) ? '0' + mes : mes,
+        anoF = date.getFullYear();
+    return anoF + "-" + mesF + "-" + diaF;
+}
+
 class Evento {
     verificaAgenda = (evento, id) => {
         let age_id = ""
@@ -55,9 +64,7 @@ class Evento {
                     }
 
                     let eventos = resultados.map((evento) => {
-                        let date = evento.age_date
-                        let options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-                        let age_date = date.toLocaleString('pt-BR', options)
+                        let age_date = dataAtualFormatada(evento.age_date)
                         let age_start = evento.age_start.toLocaleString("pt-BR", {hour:"2-digit", minute: "2-digit", second: "2-digit"})
                         let age_end = evento.age_end.toLocaleString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit" })
                         let age_date_start = age_date + "T" + age_start
