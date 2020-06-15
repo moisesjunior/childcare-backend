@@ -89,6 +89,7 @@ class Prontuario {
                         LEFT JOIN consulta ON con_pro_id = pro_id 
                         LEFT JOIN agenda ON con_age_id = age_id 
                         LEFT JOIN usuarios ON age_doctor = usr_id 
+                        LEFT JOIN paciente ON pro_pat_id = pat_id 
                         WHERE ?`
             conexao.query(
                 sql,
@@ -135,7 +136,8 @@ class Prontuario {
                             col2: horario,
                             col3: prontuario.usr_name,
                             col4: consulta,
-                            col5: atendimento
+                            col5: atendimento,
+                            name: prontuario.pat_name
                         }
 
                         return (array)
