@@ -10,6 +10,7 @@ class Usuario {
             conexao.query(
                 sql,
                 {
+                    usr_ugr_id: 2,
                     usr_email: usuario.usr_email,
                     usr_password: bcrypt.hashSync(usuario.usr_password, salt),
                     usr_name: usuario.usr_name,
